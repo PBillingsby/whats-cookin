@@ -11,6 +11,10 @@ const RecipeForm = props => {
         <input name="name" />
       </div>
       <div className="form-group">
+        <label>Serving Size:</label>
+        <input type="number" name="serving" min="0" />
+      </div>
+      <div className="form-group">
         <label>Prep Time:</label>
         <input type="number" name="prep" min="0" />
       </div>
@@ -21,17 +25,12 @@ const RecipeForm = props => {
       <div className="form-group">
         <label>Number of ingredients:</label>
         <select
+          defaultValue="-"
           onChange={e => props.renderIngredients(parseInt(e.target.value))}
         >
-          <option selected disabled>
-            -
-          </option>
           {[...Array(11).keys()].slice(1).map(num => (
-            <option>{num}</option>
+            <option key={num}>{num}</option>
           ))}
-          {/* <option>1</option>
-          <option>2</option>
-          <option>3</option> */}
         </select>
       </div>
       {props.ingredientsArr}
