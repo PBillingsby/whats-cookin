@@ -1,10 +1,11 @@
 import React from "react";
 import RecipeForm from "./RecipeForm";
-
+import RecipeCard from "./RecipeCard";
 class Recipes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      recipes: [],
       ingredientsArr: []
     };
   }
@@ -28,8 +29,12 @@ class Recipes extends React.Component {
       },
       body: JSON.stringify(recipeObject)
     }).then(resp => resp.json().then(recipe => console.log(recipe)));
-    // ARRAY OF INGREDIENTS [...event.target.ingredient]
   };
+  componentDidMount() {
+    fetch("http://localhost:3001/recipes")
+      .then(resp => resp.json())
+      .then(returnedRecipes => this.setState({ recipes: returnedRecipes }));
+  }
 
   renderIngredients = count => {
     let newArr = [];
@@ -52,11 +57,18 @@ class Recipes extends React.Component {
   render() {
     return (
       <div className="container">
-        <RecipeForm
-          handleForm={e => this.handleForm(e)}
-          renderIngredients={count => this.renderIngredients(count)}
-          ingredientsArr={this.state.ingredientsArr}
-        />
+        <div>
+          <RecipeForm
+            handleForm={e => this.handleForm(e)}
+            renderIngredients={count => this.renderIngredients(count)}
+            ingredientsArr={this.state.ingredientsArr}
+          />
+        </div>
+        <div>
+          {this.state.recipes.map(recipe => (
+            <RecipeCard key={recipe.id} recipe={recipe} />
+          ))}
+        </div>
       </div>
     );
   }
